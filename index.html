@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>100 Халяль Рецептов | Премиальные быстрые блюда и напитки</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#121417',
+                        cardBg: '#1C2026',
+                        emeraldPrimary: '#10B981',
+                        emeraldHover: '#059669',
+                        goldAccent: '#F59E0B',
+                        textMain: '#F9FAFB',
+                        textMuted: '#9CA3AF'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #121417;
+            color: #F9FAFB;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121417;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2D3748;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10B981;
+        }
+        .glass-card {
+            background: rgba(28, 32, 38, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-textMain min-h-screen flex flex-col selection:bg-emeraldPrimary selection:text-white">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 glass-card border-b border-white/10 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <!-- Logo & Halal Badge -->
+            <div class="flex items-center justify-between w-full md:w-auto">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl overflow-hidden border border-emeraldPrimary/50 shadow-lg shadow-emeraldPrimary/20 flex-shrink-0">
+                        <img src="img1.jpg" alt="Logo" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-emeraldPrimary to-goldAccent bg-clip-text text-transparent">
+                            Халяль Рецепты
+                        </h1>
+                        <p class="text-xs text-textMuted">100+ быстрых и полезных блюд</p>
+                    </div>
+                </div>
+
+                <!-- Halal Verified Badge (Mobile Header) -->
+                <div class="flex md:hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-emeraldPrimary/10 border border-emeraldPrimary/30 text-emeraldPrimary text-xs font-bold">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>100% Halal</span>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="w-full md:w-96 relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-textMuted">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="Поиск по названию или ингредиентам..." 
+                    class="w-full pl-10 pr-10 py-3 bg-[#121417]/80 border border-white/10 rounded-xl text-sm text-textMain placeholder-textMuted focus:outline-none focus:border-emeraldPrimary transition-all shadow-inner">
+                <button id="clearSearch" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-textMuted hover:text-textMain hidden">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Desktop Halal Badge & Favorites Counter -->
+            <div class="hidden md:flex items-center gap-3">
+                <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-emeraldPrimary/10 border border-emeraldPrimary/30 text-emeraldPrimary text-xs font-bold shadow-lg shadow-emeraldPrimary/10">
+                    <i class="fa-solid fa-circle-check text-sm"></i>
+                    <span>100% Halal Verified</span>
+                </div>
+                <button id="favoritesFilterBtn" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cardBorder bg-[#1C2026] border border-white/10 hover:border-goldAccent text-sm font-semibold transition-all">
+                    <i class="fa-solid fa-heart text-goldAccent"></i>
+                    <span>Избранное</span>
+                    <span id="favoritesCount" class="ml-1 px-2 py-0.5 rounded-full bg-goldAccent/20 text-goldAccent text-xs">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Favorites & Filters Bar -->
+    <div class="md:hidden px-4 py-2.5 bg-[#121417] border-b border-white/5 flex items-center justify-between">
+        <span class="text-xs text-textMuted">Категории и фильтры:</span>
+        <button id="mobileFavoritesBtn" class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-cardBg border border-white/10 text-xs font-semibold text-goldAccent">
+            <i class="fa-solid fa-heart"></i>
+            <span>Избранное (<span id="mobileFavCount">0</span>)</span>
+        </button>
+    </div>
+
+    <!-- Categories / Navigation Bar -->
+    <nav class="sticky top-[69px] md:top-[73px] z-30 bg-darkBg/95 backdrop-blur-md border-b border-white/10 py-3.5 overflow-x-auto no-scrollbar">
+        <div class="max-w-7xl mx-auto px-4 flex items-center gap-2.5 min-w-max">
+            <button class="category-btn active px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all bg-emeraldPrimary text-white shadow-lg shadow-emeraldPrimary/30 flex items-center gap-2" data-category="all">
+                <i class="fa-solid fa-border-all"></i>
+                <span>Все рецепты (100)</span>
+            </button>
+            <button class="category-btn px-5 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all bg-cardBg text-textMuted hover:text-textMain border border-white/5 hover:border-white/20 flex items-center gap-2" data-category="breakfast-5">
+                <i class="fa-solid fa-bolt text-goldAccent"></i>
+                <span>Завтраки до 5 мин</span>
+            </button>
+            <button class="category-btn px-5 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all bg-cardBg text-textMuted hover:text-textMain border border-white/5 hover:border-white/20 flex items-center gap-2" data-category="breakfast-15">
+                <i class="fa-solid fa-mug-hot text-goldAccent"></i>
+                <span>Завтраки до 15 мин</span>
+            </button>
+            <button class="category-btn px-5 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all bg-cardBg text-textMuted hover:text-textMain border border-white/5 hover:border-white/20 flex items-center gap-2" data-category="mocktails">
+                <i class="fa-solid fa-glass-water text-emeraldPrimary"></i>
+                <span>Моктейли и напитки</span>
+            </button>
+            <button class="category-btn px-5 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all bg-cardBg text-textMuted hover:text-textMain border border-white/5 hover:border-white/20 flex items-center gap-2" data-category="desserts-5">
+                <i class="fa-solid fa-cookie text-goldAccent"></i>
+                <span>Десерты до 5 мин</span>
+            </button>
+            <button class="category-btn px-5 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all bg-cardBg text-textMuted hover:text-textMain border border-white/5 hover:border-white/20 flex items-center gap-2" data-category="desserts-15">
+                <i class="fa-solid fa-cake-candles text-goldAccent"></i>
+                <span>Десерты до 15 мин</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-6 w-full">
+        <!-- Active Filter Indicator -->
+        <div id="filterInfo" class="mb-6 flex items-center justify-between text-sm text-textMuted hidden">
+            <span>Результаты по фильтру: <strong id="activeFilterName" class="text-textMain"></strong></span>
+            <button id="resetFilter" class="text-emeraldPrimary hover:underline text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-white/5">Сбросить фильтр</button>
+        </div>
+
+        <!-- Recipes Grid -->
+        <div id="recipesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+            <!-- Dynamic cards inserted via JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden flex flex-col items-center justify-center py-20 text-center">
+            <div class="w-20 h-20 rounded-full bg-cardBg border border-white/10 flex items-center justify-center text-3xl text-textMuted mb-4 shadow-inner">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+            <h3 class="text-lg font-bold text-textMain mb-2">Рецепты не найдены</h3>
+            <p class="text-sm text-textMuted max-w-sm mb-6">По вашему запросу ничего не нашлось. Попробуйте изменить поисковый запрос или сбросить фильтры.</p>
+            <button id="resetSearchBtn" class="px-6 py-3 rounded-xl bg-emeraldPrimary hover:bg-emeraldHover text-white text-sm font-semibold transition-all shadow-lg shadow-emeraldPrimary/20">
+                Показать все рецепты
+            </button>
+        </div>
+
+        <!-- Load More Section -->
+        <div id="loadMoreContainer" class="mt-10 text-center hidden">
+            <button id="loadMoreBtn" class="px-10 py-3.5 rounded-xl bg-cardBg border border-white/10 hover:border-emeraldPrimary text-textMain text-sm font-bold transition-all shadow-lg hover:shadow-emeraldPrimary/10 flex items-center gap-2.5 mx-auto">
+                <span>Показать ещё рецепты</span>
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- Modal Recipe Details -->
+    <div id="recipeModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto hidden opacity-0 transition-opacity duration-300">
+        <div id="modalContent" class="glass-card w-full max-w-2xl rounded-2xl border border-white/15 overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 my-auto">
+            <!-- Modal Header -->
+            <div class="relative p-6 border-b border-white/10 bg-cardBg/50 flex items-start justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span id="modalCategoryBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-emeraldPrimary/20 text-emeraldPrimary border border-emeraldPrimary/30"></span>
+                        <span id="modalTimeBadge" class="px-3 py-1 rounded-full text-xs font-semibold bg-goldAccent/20 text-goldAccent border border-goldAccent/30 flex items-center gap-1">
+                            <i class="fa-regular fa-clock"></i> <span id="modalTimeText"></span>
+                        </span>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/5 text-textMuted border border-white/5">
+                            <i class="fa-solid fa-fire text-orange-400"></i> <span id="modalCaloriesText"></span> ккал
+                        </span>
+                    </div>
+                    <h2 id="modalTitle" class="text-xl md:text-2xl font-extrabold text-textMain tracking-tight"></h2>
+                </div>
+                <button id="closeModal" class="w-11 h-11 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-textMuted hover:text-textMain transition-all">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 max-h-[70vh] overflow-y-auto space-y-6">
+                <!-- Ingredients Section -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-textMuted flex items-center gap-2">
+                            <i class="fa-solid fa-basket-shopping text-emeraldPrimary"></i> Ингредиенты и чек-лист
+                        </h3>
+                        <span class="text-xs text-textMuted">Отмечайте то, что уже готово</span>
+                    </div>
+                    <div id="modalIngredients" class="space-y-2 bg-[#121417]/60 p-4 rounded-xl border border-white/5">
+                        <!-- Checkboxes inserted here -->
+                    </div>
+                </div>
+
+                <!-- Timer Section -->
+                <div id="timerSection" class="bg-gradient-to-r from-emeraldPrimary/10 to-goldAccent/10 border border-emeraldPrimary/20 p-4 rounded-xl flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-xl bg-emeraldPrimary/20 text-emeraldPrimary flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-stopwatch"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-textMuted">Кухонный таймер</h4>
+                            <p id="timerDisplay" class="text-xl font-extrabold text-textMain font-mono">00:00</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <button id="startTimer" class="px-5 py-2.5 rounded-xl bg-emeraldPrimary hover:bg-emeraldHover text-white text-xs font-bold transition-all shadow-md">
+                            Старт
+                        </button>
+                        <button id="resetTimer" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-textMuted text-xs font-bold transition-all">
+                            Сброс
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Instructions Section -->
+                <div>
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-textMuted mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-goldAccent"></i> Пошаговое приготовление
+                    </h3>
+                    <div id="modalInstructions" class="space-y-3">
+                        <!-- Steps inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-white/10 bg-cardBg/50 flex items-center justify-between">
+                <button id="modalFavoriteBtn" class="flex items-center gap-2 px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-sm font-semibold transition-all">
+                    <i class="fa-solid fa-heart text-textMuted"></i>
+                    <span id="modalFavText">В избранное</span>
+                </button>
+                <button id="closeModalBtn" class="px-7 py-3 rounded-xl bg-emeraldPrimary hover:bg-emeraldHover text-white text-sm font-bold transition-all shadow-lg shadow-emeraldPrimary/20">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-white/10 glass-card py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg overflow-hidden border border-emeraldPrimary/50">
+                    <img src="img1.jpg" alt="Logo" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <p class="font-bold text-sm text-textMain">100 Халяль Рецептов</p>
+                    <p class="text-xs text-textMuted">Все рецепты строго соответствуют стандартам Халяль</p>
+                </div>
+            </div>
+
+            <!-- Halal Verified Badge (Footer) -->
+            <div class="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-emeraldPrimary/10 border border-emeraldPrimary/30 text-emeraldPrimary text-xs font-bold shadow-lg">
+                <i class="fa-solid fa-circle-check text-sm"></i>
+                <span>100% Halal Verified • Без алкоголя и запрещенных ингредиентов</span>
+            </div>
+
+            <div class="text-xs text-textMuted">
+                &copy; 2024 Халяль Меню. Все права защищены.
+            </div>
+        </div>
+    </footer>
+
+    <!-- App JavaScript Logic -->
+    <script>
+        // Database of 100 100% Halal Recipes
+        const recipes = [
+            // --- ЗАВТРАКИ ДО 5 МИНУТ (20 рецептов) ---
+            {
+                id: 1,
+                title: "Овсяноблин с авокадо и творожным сыром",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 280,
+                ingredients: ["Овсяные хлопья перемолотые - 3 ст.л.", "Яйцо куриное - 1 шт.", "Молоко 1.5% - 2 ст.л.", "Творожный сыр халяль - 30 г", "Авокадо - 1/2 шт.", "Соль, специи - по вкусу"],
+                instructions: [
+                    "Смешайте овсяные хлопья, яйцо и молоко вилкой до однородности.",
+                    "Вылейте смесь на разогретую антипригарную сковороду без масла.",
+                    "Обжаривайте 2 минуты с одной стороны до румяности, переверните.",
+                    "Смажьте готовый блин творожным сыром, выложите слайсы авокадо и сложите пополам."
+                ]
+            },
+            {
+                id: 2,
+                title: "Тост с яйцом пашот и творожным сыром",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 240,
+                ingredients: ["Цельнозерновой хлеб - 1 ломтик", "Яйцо категории СО - 1 шт.", "Творожный сыр - 25 г", "Уксус яблочный - 1 ч.л.", "Зелень, кунжут - для подачи"],
+                instructions: [
+                    "Поджарьте хлеб в тостере или на сухой сковороде.",
+                    "Вскипятите воду в небольшой кастрюле, добавьте уксус и сделайте воронку ложкой.",
+                    "Аккуратно вбейте яйцо в центр воронки и варите ровно 2 минуты.",
+                    "Смажьте хлеб творожным сыром, выложите яйцо пашот, посыпьте кунжутом и зеленью."
+                ]
+            },
+            {
+                id: 3,
+                title: "Смузи-боул с бананом и ягодами",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 220,
+                ingredients: ["Замороженные ягоды (малина/клубника) - 100 г", "Банан - 1 шт.", "Греческий йогурт натуральный - 150 г", "Овсяные хлопья - 1 ст.л.", "Семена чиа - 1 ч.л."],
+                instructions: [
+                    "Поместите в чашу блендера замороженные ягоды, нарезанный банан и греческий йогурт.",
+                    "Взбейте на высокой скорости до кремообразной текстуры.",
+                    "Переложите в пиалу, посыпьте сверху овсяными хлопьями и семенами чиа."
+                ]
+            },
+            {
+                id: 4,
+                title: "Гранола с греческим йогуртом и мёдом",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "2 мин",
+                timeMinutes: 2,
+                calories: 310,
+                ingredients: ["Греческий йогурт 2% - 200 г", "Гранола халяль без сахара - 40 г", "Мёд натуральный - 1 ч.л.", "Грецкие орехи - 15 г"],
+                instructions: [
+                    "Выложите греческий йогурт в красивую глубокую тарелку.",
+                    "Щедро насыпьте сверху хрустящую гранолу и измельченные грецкие орехи.",
+                    "Полейте натуральным мёдом перед подачей."
+                ]
+            },
+            {
+                id: 5,
+                title: "Шакшука-экспресс в кружке в микроволновке",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 190,
+                ingredients: ["Яйцо куриное - 2 шт.", "Томатная паста или соус сальса - 3 ст.л.", "Сыр моцарелла тертый - 20 г", "Зелень, соль, паприка - по вкусу"],
+                instructions: [
+                    "Смажьте большую кружку изнутри маслом.",
+                    "Выложите томатный соус или сальсу на дно кружки, добавьте специи.",
+                    "Аккуратно вбейте сверху яйца, слегка проткнув желтки зубочисткой.",
+                    "Готовьте в микроволновке на мощности 800Вт около 2.5 минут. Посыпьте сыром и зеленью."
+                ]
+            },
+            {
+                id: 6,
+                title: "Сырники за 4 минуты в микроволновке",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 230,
+                ingredients: ["Творог 5% - 130 г", "Яйцо - 1 шт.", "Рисовая мука - 1.5 ст.л.", "Подсластитель финиковый сироп - 1 ч.л."],
+                instructions: [
+                    "Тщательно размятите творог с яйцом и подсластителем в миске.",
+                    "Добавьте рисовую муку и перемешайте до однородной массы.",
+                    "Сформируйте влажными руками небольшой сырник и выложите в силиконовую форму.",
+                    "Поставьте в микроволновку на 3 минуты на максимальную мощность."
+                ]
+            },
+            {
+                id: 7,
+                title: "Протеиновый шейк с бананом и арахисовой пастой",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "2 мин",
+                timeMinutes: 2,
+                calories: 340,
+                ingredients: ["Молоко халяль - 250 мл", "Банан - 1 шт.", "Арахисовая паста - 1 ст.л.", "Корица - на кончике ножа"],
+                instructions: [
+                    "Положите в блендер очищенный банан, добавьте ложку арахисовой пасты.",
+                    "Влейте молоко и добавьте щепотку корицы.",
+                    "Взбивайте на турбо-режиме 60 секунд до получения пышной пенки."
+                ]
+            },
+            {
+                id: 8,
+                title: "Творожный десерт с ягодами и мятой",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 210,
+                ingredients: ["Мягкий творог 0-5% - 170 г", "Свежая клубника или малина - 50 г", "Мята свежая - 2 листочка", "Мёд - 1 ч.л."],
+                instructions: [
+                    "Выложите мягкий творог в креманку.",
+                    "Нарежьте ягоды и выложите поверх творога.",
+                    "Полейте мёдом и украсьте листиками свежей мяты."
+                ]
+            },
+            {
+                id: 9,
+                title: "Лаваш-ролл с творожным сыром и зеленью",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 260,
+                ingredients: ["Тонкий армянский лаваш - 1 лист", "Творожный сыр - 40 г", "Свежий укроп и петрушка - 20 г", "Огурец свежий - 1/2 шт."],
+                instructions: [
+                    "Расстелите лаваш на доске, щедро смажьте творожным сыром.",
+                    "Мелко нарежьте зелень и тонкие слайсы огурца, равномерно распределите.",
+                    "Тягостно сверните лаваш в плотный ролл и разрежьте на порционные кусочки."
+                ]
+            },
+            {
+                id: 10,
+                title: "Горячие бутерброды с моцареллой и томатами",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 290,
+                ingredients: ["Хлеб для тостов - 2 ломтика", "Моцарелла для пиццы - 50 г", "Помидор - 4 кружочка", "Сушеный базилик - 1 ч.л."],
+                instructions: [
+                    "Положите кружочки помидоров на тостовый хлеб.",
+                    "Накройте щедрым слоем натертой моцареллы, посыпьте базиликом.",
+                    "Поставьте в разогретую микроволновку или мини-печь на 3 минуты, пока сыр полностью не расплавится."
+                ]
+            },
+            {
+                id: 11,
+                title: "Арахисовый тост с бананом и семенами",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "2 мин",
+                timeMinutes: 2,
+                calories: 310,
+                ingredients: ["Цельнозерновой хлеб - 1 ломтик", "Арахисовая паста - 1.5 ст.л.", "Банан - 1/2 шт.", "Семена кунжута или льна - 1 ч.л."],
+                instructions: [
+                    "Поджарьте хлеб в тостере.",
+                    "Намажьте густым слоем арахисовой пасты.",
+                    "Выложите кружочки банана и посыпьте семечками."
+                ]
+            },
+            {
+                id: 12,
+                title: "Быстрый кефирный коктейль с зеленью и огурцом",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 150,
+                ingredients: ["Кефир 1% халяль - 250 мл", "Свежий огурец - 1 шт.", "Укроп - 10 г", "Соль, черный перец - по вкусу"],
+                instructions: [
+                    "Очистите огурец от кожицы и нарежьте кубиками.",
+                    "Поместите огурец и зелень в блендер, добавьте кефир и специи.",
+                    "Взбейте до однородности. Напиток отлично тонизирует по утрам."
+                ]
+            },
+            {
+                id: 13,
+                title: "Яйцо пашот на цельнозерновом хлебе с гуакамоле",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 270,
+                ingredients: ["Хлеб - 1 ломтик", "Готовое пюре гуакамоле - 40 г", "Яйцо - 1 шт.", "Лимонный сок - 1 ч.л."],
+                instructions: [
+                    "Подсушите хлеб на сухой сковороде.",
+                    "Сварите яйцо пашот (2 минуты в кипятке с уксусом).",
+                    "Намажьте хлеб гуакамоле, сбрызните лимонным соком и сверху выложите яйцо."
+                ]
+            },
+            {
+                id: 14,
+                title: "Творожный крем с финиками и грецким орехом",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 280,
+                ingredients: ["Мягкий творог - 150 г", "Финики без косточек - 3 шт.", "Грецкие орехи - 15 г", "Корица - щепотка"],
+                instructions: [
+                    "Мелко нарежьте финики.",
+                    "Смешайте мягкий творог с финиками и щепоткой корицы.",
+                    "Посыпьте измельченными грецкими орехами сверху."
+                ]
+            },
+            {
+                id: 15,
+                title: "Сэндвич с халяльной индейкой и огурцом",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 250,
+                ingredients: ["Цельнозерновой хлеб - 2 ломтика", "Ветчина из индейки халяль - 50 г", "Свежий огурец - 1/2 шт.", "Листья салата - 2 шт."],
+                instructions: [
+                    "Выложите листья салата на ломтики хлеба.",
+                    "Добавьте слайсы индейки и тонкие кружочки огурца.",
+                    "Накройте вторым ломтиком хлеба и слегка прижмите."
+                ]
+            },
+            {
+                id: 16,
+                title: "Мгновенная овсянка с орехами и мёдом",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 240,
+                ingredients: ["Овсяные хлопья быстрого приготовления - 40 г", "Кипяток или горячее молоко - 150 мл", "Мёд - 1 ч.л.", "Миндальные лепестки - 10 г"],
+                instructions: [
+                    "Залейте овсяные хлопья кипятком или горячим молоком в глубокой миске.",
+                    "Накройте блюдцем и дайте настояться 3 минуты.",
+                    "Добавьте мёд и миндальные лепестки перед подачей."
+                ]
+            },
+            {
+                id: 17,
+                title: "Тост с рикоттой, мёдом и грушей",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 260,
+                ingredients: ["Хлеб - 1 ломтик", "Сыр рикотта халяль - 40 г", "Спелая груша - 1/3 шт.", "Мёд - 1 ч.л."],
+                instructions: [
+                    "Поджарьте хлеб в тостере.",
+                    "Намажьте рикоттой, выложите тончайшие ломтики груши.",
+                    "Полейте капелькой мёда."
+                ]
+            },
+            {
+                id: 18,
+                title: "Кефирный коктейль с корицей и яблоком",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 180,
+                ingredients: ["Кефир 1% - 250 мл", "Зеленое яблоко - 1/2 шт.", "Корица молотая - 1/2 ч.л."],
+                instructions: [
+                    "Очистите яблоко от кожуры и сердцевины, нарежьте кусочками.",
+                    "Поместите яблоко в блендер, добавьте кефир и корицу.",
+                    "Взбейте до воздушной пенистой структуры."
+                ]
+            },
+            {
+                id: 19,
+                title: "Ленивый бутерброд с хумусом и черри",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "2 мин",
+                timeMinutes: 2,
+                calories: 220,
+                ingredients: ["Цельнозерновой хлеб - 1 ломтик", "Хумус классический халяль - 2 ст.л.", "Томаты черри - 3 шт.", "Оливковое масло - 1 ч.л."],
+                instructions: [
+                    "Намажьте хумус на хлеб.",
+                    "Разрежьте томаты черри пополам и выложите сверху.",
+                    "Сбрызните капелькой оливкового масла."
+                ]
+            },
+            {
+                id: 20,
+                title: "Простой омлет-минутка в кружке",
+                category: "breakfast-5",
+                categoryName: "Завтрак до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 200,
+                ingredients: ["Яйцо куриное - 2 шт.", "Молоко - 2 ст.л.", "Сыр твердый тертый - 15 г", "Соль - по вкусу"],
+                instructions: [
+                    "Взбейте яйца с молоком и щепоткой соли прямо в кружке.",
+                    "Добавьте тертый сыр.",
+                    "Поставьте в микроволновку на 2 минуты, перемешайте в середине процесса."
+                ]
+            },
+
+            // --- ЗАВТРАКИ ДО 15 МИНУТ (20 рецептов) ---
+            {
+                id: 21,
+                title: "Турецкий менемен с томатами и перцем",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 310,
+                ingredients: ["Яйца куриные - 3 шт.", "Помидоры сочные - 2 шт.", "Болгарский перец - 1 шт.", "Масло сливочное халяль - 15 г", "Специи (соль, перец, паприка)"],
+                instructions: [
+                    "Мелко нарежьте помидоры и болгарский перец.",
+                    "Растопите сливочное масло на сковороде, обжарьте перец 3 минуты, добавьте помидоры.",
+                    "Тушите овощи 5 минут до мягкости, затем вбейте яйца.",
+                    "Аккуратно перемешивайте лопаткой, создавая нежную кремовую текстуру менемена."
+                ]
+            },
+            {
+                id: 22,
+                title: "Пышные панкейки на кефире за 12 минут",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 340,
+                ingredients: ["Кефир 2.5% - 200 мл", "Мука пшеничная - 150 г", "Яйцо - 1 шт.", "Сахар - 1.5 ст.л.", "Сода - 0.5 ч.л."],
+                instructions: [
+                    "В глубокой миске взбейте яйцо с сахаром и теплым кефиром.",
+                    "Всыпьте муку с содой, тщательно размешайте венчиком до консистенции густой сметаны.",
+                    "Выпекайте на сухой разогретой антипригарной сковороде по 2 минуты с каждой стороны до румянца."
+                ]
+            },
+            {
+                id: 23,
+                title: "Омлет с овощами и моцареллой",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 320,
+                ingredients: ["Яйца - 3 шт.", "Молоко - 40 мл", "Шпинат свежий - 30 г", "Моцарелла - 40 г", "Масло сливочное - 10 г"],
+                instructions: [
+                    "Взбейте яйца с молоком и солью.",
+                    "Растопите масло на сковороде, слегка припустите шпинат (1 минута).",
+                    "Залейте взбитыми яйцами, накройте крышкой и готовьте 5 минут на среднем огне.",
+                    "Посыпьте моцареллой, дайте расплавиться и сложите омлет пополам."
+                ]
+            },
+            {
+                id: 24,
+                title: "Тёплый сэндвич с курицей-гриль и сыром",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 380,
+                ingredients: ["Хлеб для сэндвичей - 2 ломтика", "Отварное филе курицы халяль - 70 г", "Сыр полутвердый - 30 г", "Соус ранч халяль - 1 ст.л."],
+                instructions: [
+                    "Смажьте ломтики хлеба соусом.",
+                    "Выложите мелко нарезанное филе курицы и пластинки сыра.",
+                    "Накройте вторым ломтиком и обжарьте на сковороде-гриль под прессом по 3 минуты с каждой стороны."
+                ]
+            },
+            {
+                id: 25,
+                title: "Творожные лепешки на сковороде с зеленью",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 290,
+                ingredients: ["Творог - 150 г", "Яйцо - 1 шт.", "Мука рисовая или пшеничная - 3 ст.л.", "Зелень рубленная - 20 г", "Соль - по вкусу"],
+                instructions: [
+                    "Смешайте творог, яйцо, соль и зелень.",
+                    "Постепенно добавьте муку, замесите мягкое тесто.",
+                    "Сформируйте лепешки и обжаривайте на сухой или слегка смазанной маслом сковороде по 4 минуты с каждой стороны."
+                ]
+            },
+            {
+                id: 26,
+                title: "Французский тост с корицей и сиропом",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "8 мин",
+                timeMinutes: 8,
+                calories: 310,
+                ingredients: ["Хлеб белый - 2 ломтика", "Яйцо - 1 шт.", "Молоко - 30 мл", "Корица - 1/2 ч.л.", "Сливочное масло - 10 г"],
+                instructions: [
+                    "Взбейте яйцо с молоком и корицей в плоской тарелке.",
+                    "Обмакните ломтики хлеба в яичную смесь с обеих сторон.",
+                    "Обжарьте на сливочном масле до золотистой корочки (по 3 минуты с каждой стороны)."
+                ]
+            },
+            {
+                id: 27,
+                title: "Творожная запеканка-минутка на сковороде",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 270,
+                ingredients: ["Творог - 180 г", "Яйцо - 1 шт.", "Манная крупа - 2 ст.л.", "Сахар - 1 ст.л.", "Масло сливочное - 10 г"],
+                instructions: [
+                    "Тщательно смешайте творог, яйцо, манку и сахар.",
+                    "Выложите массу на разогретую сковороду со сливочным маслом, разровняйте лопаткой.",
+                    "Накройте крышкой и готовьте на медленном огне 7 минут, затем аккуратно переверните и допеките еще 4 минуты."
+                ]
+            },
+            {
+                id: 28,
+                title: "Тонкие блинчики на молоке халяль",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "15 мин",
+                timeMinutes: 15,
+                calories: 330,
+                ingredients: ["Молоко - 250 мл", "Мука - 120 г", "Яйцо - 1 шт.", "Сахар - 1 ст.л.", "Растительное масло - 1 ст.л."],
+                instructions: [
+                    "Взбейте яйцо с сахаром, добавьте половину молока и всю муку, размешайте до гладкости без комочков.",
+                    "Влейте остаток молока и масло, перемешайте.",
+                    "Выпекайте тонкие блинчики на раскаленной сковороде по 1-1.5 минуты с каждой стороны."
+                ]
+            },
+            {
+                id: 29,
+                title: "Яичница с томатами и суджуком халяль",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 390,
+                ingredients: ["Суджук халяль слайсы - 50 г", "Яйца - 3 шт.", "Помидоры - 1 шт.", "Масло сливочное - 10 г"],
+                instructions: [
+                    "Обжарьте кружочки суджука на сковороде в течение 2 минут с обеих сторон до выделения аромата.",
+                    "Добавьте нарезанные дольками помидоры, тушите 3 минуты.",
+                    "Вбейте яйца, посолите и готовьте до желаемой степени прожарки желтка."
+                ]
+            },
+            {
+                id: 30,
+                title: "Овсяные вафли в электровафельнице",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 280,
+                ingredients: ["Овсяная мука - 4 ст.л.", "Яйцо - 1 шт.", "Молоко - 50 мл", "Разрыхлитель - 1/2 ч.л."],
+                instructions: [
+                    "Смешайте все ингредиенты до получения теста сметанообразной консистенции.",
+                    "Разогрейте электровафельницу и смажьте панели маслом.",
+                    "Выпекайте вафли около 5 минут до золотистого цвета."
+                ]
+            },
+            {
+                id: 31,
+                title: "Кукурузный блинчик с сыром и зеленью",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 300,
+                ingredients: ["Кукурузная мука - 3 ст.л.", "Яйцо - 1 шт.", "Молоко - 50 мл", "Сыр тертый - 30 г"],
+                instructions: [
+                    "Смешайте кукурузную муку, яйцо и молоко.",
+                    "Вылейте тесто на сковороду, выложите сыр на одну половину.",
+                    "Накройте второй половиной, обжарьте до расплавления сыра."
+                ]
+            },
+            {
+                id: 32,
+                title: "Боррито-завтрак с курицей и фасолью",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 410,
+                ingredients: ["Тортилья - 1 шт.", "Яйцо - 2 шт.", "Консервированная фасоль халяль - 4 ст.л.", "Куриное филе отварное - 50 г"],
+                instructions: [
+                    "Обжарьте яйца на сковороде, помешивая (скрэмбл).",
+                    "Выложите на тортилью скрэмбл, фасоль и кусочки курицы.",
+                    "Заверните конвертом и подрумяньте на сухой сковороде с двух сторон."
+                ]
+            },
+            {
+                id: 33,
+                title: "Омлет-рулет с творожным сыром и зеленью",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 270,
+                ingredients: ["Яйца - 3 шт.", "Молоко - 2 ст.л.", "Творожный сыр - 40 г", "Укроп - 15 г"],
+                instructions: [
+                    "Взбейте яйца с молоком и зеленью, вылейте тонким слоем на сковороду.",
+                    "Жарьте омлетный блинчик 4 минуты до схватывания верха.",
+                    "Смажьте творожным сыром и аккуратно сверните в рулет, нарежьте порциями."
+                ]
+            },
+            {
+                id: 34,
+                title: "Тёплый сэндвич с тунцом и сыром",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 330,
+                ingredients: ["Хлеб - 2 ломтика", "Консервированный тунец (в собственном соку) - 60 г", "Сыр чеддер - 1 ломтик", "Майонез халяль - 1 ч.л."],
+                instructions: [
+                    "Размятите тунец вилкой, смешайте с капелькой майонеза.",
+                    "Выложите на хлеб тунец и сыр чеддер.",
+                    "Запекайте на сковороде под крышкой до расплавления сыра."
+                ]
+            },
+            {
+                id: 35,
+                title: "Сырные блинчики на кефире за 12 минут",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 320,
+                ingredients: ["Кефир - 200 мл", "Мука - 100 г", "Яйцо - 1 шт.", "Сыр тертый - 50 г", "Сода - 1/3 ч.л."],
+                instructions: [
+                    "Смешайте кефир, яйцо, муку и соду до однородного теста.",
+                    "Вмешайте тертый сыр прямо в тесто.",
+                    "Выпекайте блинчики на разогретой сковороде по 2 минуты с каждой стороны."
+                ]
+            },
+            {
+                id: 36,
+                title: "Яйца бенедикт с индейкой на маффине",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "15 мин",
+                timeMinutes: 15,
+                calories: 360,
+                ingredients: ["Английский маффин или булочка - 1 шт.", "Ветчина из индейки - 50 г", "Яйцо - 1 шт.", "Йогуртовый соус - 2 ст.л."],
+                instructions: [
+                    "Подсушите половинку булочки в тостере.",
+                    "Сварите яйцо пашот в кипятке за 2 минуты.",
+                    "Соберите завтрак: булочка, индейка, яйцо пашот и соус сверху."
+                ]
+            },
+            {
+                id: 37,
+                title: "Творожные оладушки на кефире",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 280,
+                ingredients: ["Творог - 100 г", "Кефир - 100 мл", "Мука - 3 ст.л.", "Яйцо - 1 шт.", "Сахар - 1 ст.л."],
+                instructions: [
+                    "Соедините все ингредиенты в миске и взбейте блендером до теста.",
+                    "Жарьте оладьи на сковороде с антипригарным покрытием по 3 минуты с каждой стороны."
+                ]
+            },
+            {
+                id: 38,
+                title: "Омлет с зеленью и брынзой",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 310,
+                ingredients: ["Яйца - 3 шт.", "Брынза халяль - 40 г", "Петрушка и укроп - 20 г", "Сливочное масло - 10 г"],
+                instructions: [
+                    "Взбейте яйца, добавьте измельченную зелень.",
+                    "Растопите масло на сковороде, вылейте яичную смесь.",
+                    "Покрошите сверху брынзу и готовьте под крышкой до готовности."
+                ]
+            },
+            {
+                id: 39,
+                title: "Лаваш с начинкой из яйца и сыра на сковороде",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 350,
+                ingredients: ["Лаваш - 1 лист", "Яйца - 2 шт.", "Сыр твердый тертый - 60 г", "Масло сливочное - 15 г"],
+                instructions: [
+                    "Вырежьте круг из лаваша по размеру сковороды.",
+                    "Выложите на разогретую сковороду лаваш, вбейте яйца, распределите сыр.",
+                    "Накройте вторым слоем лаваша и обжаривайте с обеих сторон до хрустящей корочки."
+                ]
+            },
+            {
+                id: 40,
+                title: "Пышные панкейки с бананом за 15 минут",
+                category: "breakfast-15",
+                categoryName: "Завтрак до 15 мин",
+                time: "15 мин",
+                timeMinutes: 15,
+                calories: 320,
+                ingredients: ["Банан спелый - 1 шт.", "Яйцо - 1 шт.", "Мука - 100 г", "Молоко - 100 мл", "Разрыхлитель - 1/2 ч.л."],
+                instructions: [
+                    "Разомните банан вилкой в пюре, добавьте яйцо и молоко.",
+                    "Всыпьте муку с разрыхлителем, замесите тесто.",
+                    "Выпекайте ароматные панкейки на сухой сковороде до пузырьков, затем переверните."
+                ]
+            },
+
+            // --- БЕЗАЛКОГОЛЬНЫЕ КОКТЕЙЛИ И НАПИТКИ (МОКТЕЙЛИ) (20 рецептов) ---
+            {
+                id: 41,
+                title: "Освежающий мохито со спрайтом и мятой",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 120,
+                ingredients: ["Мята свежая - 10 листиков", "Лайм - 1/2 шт.", "Сироп сахарный - 20 мл", "Лимонад (Sprite/7up) - 200 мл", "Лёд в кубиках - 1 стакан"],
+                instructions: [
+                    "Положите листья мяты и дольки лайма в высокий стакан, слегка придавите мадлером.",
+                    "Насыпьте полный стакан колотого льда или кубиков.",
+                    "Влейте сахарный сироп и доверху заполните лимонадом. Перемешайте барной ложкой."
+                ]
+            },
+            {
+                id: 42,
+                title: "Ягодный смузи с малиной и бананом",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 160,
+                ingredients: ["Малина (свежая или замороженная) - 80 г", "Банан - 1 шт.", "Йогурт питьевой натуральный - 200 мл", "Мёд - 1 ч.л."],
+                instructions: [
+                    "Поместите все ингредиенты в чашу блендера.",
+                    "Взбейте на высокой скорости до получения однородного яркого коктейля.",
+                    "Перелейте в охлажденный стакан и подавайте с трубочкой."
+                ]
+            },
+            {
+                id: 43,
+                title: "Холодный матча-латте на миндальном молоке",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 110,
+                ingredients: ["Порошок матча - 1 ч.л.", "Горячая вода - 40 мл", "Миндальное молоко халяль - 200 мл", "Лёд - 5 кубиков", "Кленовый сироп - 1 ч.л."],
+                instructions: [
+                    "Залейте порошок матча горячей водой и взбейте венчиком до образования пенки.",
+                    "Наполните стакан льдом, влейте миндальное молоко и сироп.",
+                    "Аккуратно влейте взбитую матчу сверху, чтобы получился красивый градиент."
+                ]
+            },
+            {
+                id: 44,
+                title: "Домашний лимонад с имбирем и лимоном",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "5 мин",
+                timeMinutes: 5,
+                calories: 130,
+                ingredients: ["Лимон (сок и цедра) - 1 шт.", "Корень имбиря тертый - 1 ч.л.", "Мёд - 2 ст.л.", "Газированная вода - 300 мл", "Лёд"],
+                instructions: [
+                    "Смешайте лимонный сок, тертый имбирь и мёд в кувшине.",
+                    "Добавьте газированную воду и хорошо перемешайте.",
+                    "Подавайте со льдом и дольками лимона."
+                ]
+            },
+            {
+                id: 45,
+                title: "Тропический моктейль «Пина Колада Безалкогольная»",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 190,
+                ingredients: ["Ананасовый сок - 150 мл", "Кокосовое молоко - 50 мл", "Ананас свежий - 1 кольцо", "Лёд - полстакана"],
+                instructions: [
+                    "Положите кубики ананаса, ананасовый сок и кокосовое молоко в блендер.",
+                    "Взбейте со льдом до пенистой консистенции пина колады.",
+                    "Украсьте зонтиком и кусочком ананаса."
+                ]
+            },
+            {
+                id: 46,
+                title: "Клубничный лимонад с базиликом",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "5 мин",
+                timeMinutes: 5,
+                calories: 140,
+                ingredients: ["Клубника свежая - 5 шт.", "Базилик фиолетовый - 3 листика", "Лимонный сок - 30 мл", "С спрайтом или газировкой - 200 мл"],
+                instructions: [
+                    "Разомните клубнику с листьями базилика и лимонным соком в стакане.",
+                    "Добавьте лед и залейте газированной водой.",
+                    "Тщательно перемешайте."
+                ]
+            },
+            {
+                id: 47,
+                title: "Пряный согревающий безалкогольный глинтвейн",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 150,
+                ingredients: ["Виноградный сок (натуральный) - 300 мл", "Апельсин - 1/2 шт.", "Корица (палочка) - 1 шт.", "Гвоздика - 3 шт.", "Имбирь - 1 слайс"],
+                instructions: [
+                    "Влейте виноградный сок в сотейник, добавьте специи и кружочки апельсина.",
+                    "Нагревайте на среднем огне почти до кипения (но не кипятите!).",
+                    "Дайте настояться 5 минут под крышкой и разливайте по кружкам."
+                ]
+            },
+            {
+                id: 48,
+                title: "Манговый ласси по-индийски",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 170,
+                ingredients: ["Пюре манго (или спелый манго) - 100 г", "Йогурт натуральный - 150 мл", "Холодная вода - 50 мл", "Щепотка кардамона"],
+                instructions: [
+                    "Поместите манговое пюре, йогурт и воду в блендер.",
+                    "Добавьте щепотку молотого кардамона для аромата.",
+                    "Взбейте до воздушной кремовой консистенции и подавайте охлажденным."
+                ]
+            },
+            {
+                id: 49,
+                title: "Огуречный детокс-коктейль с лаймом и мятой",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 60,
+                ingredients: ["Свежий огурец - 1 шт.", "Лайм - 1/2 шт.", "Мята - 6 листиков", "Вода минеральная газированная - 200 мл"],
+                instructions: [
+                    "Нарежьте огурец кружочками, измельчите мяту и лайм.",
+                    "Взбейте всё в блендере вместе с минеральной водой.",
+                    "Процедите через ситечко в стакан со льдом."
+                ]
+            },
+            {
+                id: 50,
+                title: "Арбузный фреш со льдом и мятой",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 90,
+                ingredients: ["Мякоть арбуза без косточек - 250 г", "Мята - 5 листочков", "Лёд - 4 кубика"],
+                instructions: [
+                    "Нарежьте арбуз кубиками, удалив все косточки.",
+                    "Взбейте в блендере мякоть арбуза с листьями мяты и льдом.",
+                    "Перелейте в высокий бокал."
+                ]
+            },
+            {
+                id: 51,
+                title: "Моктейль «Санрайз» с апельсином и гренадином",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "2 мин",
+                timeMinutes: 2,
+                calories: 140,
+                ingredients: ["Апельсиновый сок - 200 мл", "Сироп гренадин (халяль) - 20 мл", "Лёд - 5 кубиков", "Долька апельсина"],
+                instructions: [
+                    "Наполните высокий бокал кубиками льда.",
+                    "Влейте апельсиновый сок.",
+                    "Аккуратно влейте сироп гренадин по стенке стакана, чтобы он опустился на дно, создавая эффект заката."
+                ]
+            },
+            {
+                id: 52,
+                title: "Холодный персиковый чай с мятой",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "5 мин",
+                timeMinutes: 5,
+                calories: 100,
+                ingredients: ["Крепкий черный чай (охлажденный) - 200 мл", "Персиковый сироп или пюре - 30 мл", "Лёд - полстакана", "Мята"],
+                instructions: [
+                    "Заварите чай и дайте ему остыть.",
+                    "Смешайте чай с персиковым сиропом в стакане со льдом.",
+                    "Украсьте веточкой мяты."
+                ]
+            },
+            {
+                id: 53,
+                title: "Имбирный эль домашнего приготовления",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "8 мин",
+                timeMinutes: 8,
+                calories: 110,
+                ingredients: ["Имбирь тертый - 2 ст.л.", "Лимонный сок - 30 мл", "Мёд - 1 ст.л.", "Газированная вода - 250 мл"],
+                instructions: [
+                    "Проварите имбирь с небольшим количеством воды и мёдом 3 минуты (имбирный сироп).",
+                    "Процедите сироп в стакан, добавьте лимонный сок и газированную воду.",
+                    "Хорошо перемешайте и подавайте со льдом."
+                ]
+            },
+            {
+                id: 54,
+                title: "Кокосово-банановый милкшейк",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "2 мин",
+                timeMinutes: 2,
+                calories: 210,
+                ingredients: ["Молоко - 200 мл", "Кокосовые сливки - 30 мл", "Банан - 1 шт."],
+                instructions: [
+                    "Поместите все ингредиенты в блендер.",
+                    "Взбейте на высокой скорости до густой пенной шапки.",
+                    "Перелейте в красивый стакан."
+                ]
+            },
+            {
+                id: 55,
+                title: "Моктейль «Голубая Лагуна Безалкогольная»",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "2 мин",
+                timeMinutes: 2,
+                calories: 130,
+                ingredients: ["Сироп Блю Кюрасао (безалкогольный халяль) - 20 мл", "Лимонный сок - 20 мл", "Спрайт - 200 мл", "Лёд"],
+                instructions: [
+                    "Насыпьте лед в бокал.",
+                    "Влейте безалкогольный сироп Блю Кюрасао и лимонный сок.",
+                    "Долейте спрайт доверху, наслаждайтесь красивым лазурным цветом."
+                ]
+            },
+            {
+                id: 56,
+                title: "Яблочно-мятный фреш со льдом",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 95,
+                ingredients: ["Зеленые яблоки - 2 шт.", "Мята - 5 листиков", "Лёд - 4 кубика"],
+                instructions: [
+                    "Выжмите сок из зеленых яблок через соковыжималку.",
+                    "Взбейте сок с мятой и льдом в блендере пару секунд.",
+                    "Подавайте охлажденным."
+                ]
+            },
+            {
+                id: 57,
+                title: "Шоколадный милкшейк без мороженого",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 220,
+                ingredients: ["Молоко - 250 мл", "Какао-порошок - 1.5 ст.л.", "Банан - 1 шт.", "Мёд - 1 ст.л."],
+                instructions: [
+                    "Положите в блендер нарезанный банан, какао, мёд и молоко.",
+                    "Взбейте до кремовой густой текстуры молочного коктейля.",
+                    "Подавайте в высоком стакане."
+                ]
+            },
+            {
+                id: 58,
+                title: "Черничный смузи с греческим йогуртом",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 160,
+                ingredients: ["Черника (замороженная или свежая) - 70 г", "Греческий йогурт - 150 г", "Молоко - 50 мл", "Мёд - 1 ч.л."],
+                instructions: [
+                    "Поместите чернику, йогурт, молоко и мёд в чашу блендера.",
+                    "Взбейте до однородного фиолетового цвета.",
+                    "Перелейте в стакан и украсите ягодами."
+                ]
+            },
+            {
+                id: 59,
+                title: "Цитрусовый микс с апельсином и грейпфрутом",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 110,
+                ingredients: ["Апельсин - 1 шт.", "Грейпфрут - 1/2 шт.", "Лёд - 5 кубиков", "Мята для украшения"],
+                instructions: [
+                    "Выжмите сок из апельсина и грейпфрута.",
+                    "Смешайте в стакане со льдом.",
+                    "Украсьте веточкой мяты."
+                ]
+            },
+            {
+                id: 60,
+                title: "Пряный масала-чай на молоке халяль",
+                category: "mocktails",
+                categoryName: "Моктейль",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 130,
+                ingredients: ["Черный чай - 2 ч.л.", "Молоко - 150 мл", "Вода - 150 мл", "Специи (имбирь, кардамон, корица, гвоздика)", "Мёд - 1 ч.л."],
+                instructions: [
+                    "Вскипятите воду со специями в сотейнике в течение 3 минут.",
+                    "Добавьте черный чай и молоко, доведите до кипения.",
+                    "Процедите в чашку, добавьте мёд."
+                ]
+            },
+
+            // --- ДЕСЕРТЫ ДО 5 МИНУТ (20 рецептов) ---
+            {
+                id: 61,
+                title: "Шоколадный брауни в кружке за 3 минуты",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 290,
+                ingredients: ["Мука - 3 ст.л.", "Какао-порошок - 1.5 ст.л.", "Сахар или подсластитель - 2 ст.л.", "Молоко - 3 ст.л.", "Растительное масло - 1.5 ст.л."],
+                instructions: [
+                    "Смешайте муку, какао и сахар прямо в кружке.",
+                    "Добавьте молоко и масло, тщательно перемешайте вилкой до гладкого теста без комочков.",
+                    "Поставьте в микроволновку на 70-90 секунд на максимальной мощности."
+                ]
+            },
+            {
+                id: 62,
+                title: "Чиа-пудинг с кокосовым молоком и ягодами",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 210,
+                ingredients: ["Семена чиа - 3 ст.л.", "Кокосовое молоко - 150 мл", "Мёд - 1 ст.л.", "Свежая малина - 30 г"],
+                instructions: [
+                    "Смешайте семена чиа с кокосовым молоком и мёдом в стакане.",
+                    "Дайте постоять 3 минуты и тщательно перемешайте еще раз, чтобы не было комков.",
+                    "Украсьте ягодами (можно убрать в холодильник на время для загустения)."
+                ]
+            },
+            {
+                id: 63,
+                title: "Финиковые конфеты с грецким орехом и какао",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "5 мин",
+                timeMinutes: 5,
+                calories: 240,
+                ingredients: ["Финики мягкие без косточек - 100 г", "Грецкие орехи - 40 г", "Какао-порошок - 1 ст.л.", "Кокосовая стружка - 15 г"],
+                instructions: [
+                    "Поместите финики и грецкие орехи в блендер, измельчите в липкую пасту.",
+                    "Добавьте какао и перемешайте.",
+                    "Скатайте небольшие шарики влажными руками и обваляйте в кокосовой стружке."
+                ]
+            },
+            {
+                id: 64,
+                title: "Банановое мороженое без сахара и сливок",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 180,
+                ingredients: ["Замороженные спелые бананы - 2 шт.", "Молоко - 2 ст.л.", "Какао или ванилин - по вкусу"],
+                instructions: [
+                    "Нарежьте замороженные бананы кружочками.",
+                    "Поместите в мощный блендер вместе с молоком.",
+                    "Взбейте до текстуры мягкого сливочного мороженого. Подавайте сразу."
+                ]
+            },
+            {
+                id: 65,
+                title: "Творожный десерт в стакане с печеньем",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 260,
+                ingredients: ["Мягкий творог - 150 г", "Печенье песочное халяль - 3 шт.", "Мёд - 1 ч.л.", "Грецкие орехи - 15 г"],
+                instructions: [
+                    "Измельчите печенье в крошку руками.",
+                    "Выкладывайте в стакан слоями: творог, крошка печенья, мёд, орехи.",
+                    "Повторите слои."
+                ]
+            },
+            {
+                id: 66,
+                title: "Яблоко в микроволновке с корицей и мёдом",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 140,
+                ingredients: ["Крупное яблоко - 1 шт.", "Мёд - 1 ч.л.", "Корица - 1/2 ч.л.", "Грецкий орех - 10 г"],
+                instructions: [
+                    "Вырежьте сердцевину яблока, не прорезая насквозь до дна.",
+                    "Засыпьте внутрь корицу, измельченный орех и положите мёд.",
+                    "Поставьте в микроволновку на 3 минуты до мягкости."
+                ]
+            },
+            {
+                id: 67,
+                title: "Арахисово-овсяные шарики без выпечки",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "5 мин",
+                timeMinutes: 5,
+                calories: 280,
+                ingredients: ["Овсяные хлопья быстрого приготовления - 4 ст.л.", "Арахисовая паста - 2 ст.л.", "Мёд - 1 ст.л.", "Изюм - 20 г"],
+                instructions: [
+                    "Смешайте овсянку, арахисовую пасту, мёд и изюм в миске.",
+                    "Сформируйте небольшие плотные шарики.",
+                    "Десерт готов к употреблению сразу!"
+                ]
+            },
+            {
+                id: 68,
+                title: "Десерт из авокадо и какао «Шоколадный мусс»",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 230,
+                ingredients: ["Спелый мягкий авокадо - 1 шт.", "Какао-порошок - 2 ст.л.", "Мёд или сироп финиковый - 2 ст.л.", "Молоко - 30 мл"],
+                instructions: [
+                    "Очистите авокадо и удалите косточку.",
+                    "Поместите мякоть авокадо, какао, мёд и молоко в блендер.",
+                    "Взбейте до гладкой кремообразной шоколадной массы."
+                ]
+            },
+            {
+                id: 69,
+                title: "Быстрый трайфл с йогуртом и ягодами",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 190,
+                ingredients: ["Греческий йогурт - 150 г", "Бисквитное печенье - 2 шт.", "Замороженная вишня без косточек - 40 г"],
+                instructions: [
+                    "Поломайте печенье на кусочки в креманку.",
+                    "Выложите слой греческого йогурта.",
+                    "Добавьте ягоды вишни и повторите слои."
+                ]
+            },
+            {
+                id: 70,
+                title: "Творожный крем с персиками",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 170,
+                ingredients: ["Мягкий творог - 150 г", "Консервированные персики халяль (без сиропа) - 50 г", "Ванилин - на кончике ножа"],
+                instructions: [
+                    "Взбейте мягкий творог с ванилином.",
+                    "Нарежьте персики мелкими кубиками.",
+                    "Смешайте половину персиков с творогом, а остальными украсьте сверху."
+                ]
+            },
+            {
+                id: 71,
+                title: "Шоколадно-овсяный десерт в стакане",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 220,
+                ingredients: ["Овсянка быстрого приготовления - 3 ст.л.", "Молоко - 100 мл", "Какао - 1 ст.л.", "Мёд - 1 ч.л."],
+                instructions: [
+                    "Залейте овсянку горячим молоком.",
+                    "Добавьте какао и мёд, тщательно размешайте.",
+                    "Дайте постоять 3 минуты и подавайте."
+                ]
+            },
+            {
+                id: 72,
+                title: "Тост с рикоттой, мёдом и орехами",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 250,
+                ingredients: ["Л ломтик бриоши или хлеба - 1 шт.", "Сыр рикотта - 40 г", "Мёд - 1 ч.л.", "Грецкие орехи - 15 г"],
+                instructions: [
+                    "Поджарьте хлеб на сухой сковороде.",
+                    "Намажьте рикоттой, полейте мёдом.",
+                    "Посыпьте измельченными грецкими орехами."
+                ]
+            },
+            {
+                id: 73,
+                title: "Быстрый пудинг из рикотты и какао",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 240,
+                ingredients: ["Сыр рикотта - 130 г", "Какао - 1 ст.л.", "Сахарная пудра или мёд - 1 ст.л."],
+                instructions: [
+                    "Тщательно взбейте рикотту с какао и мёдом венчиком до кремовой текстуры.",
+                    "Переложите в красивую креманку и охладите."
+                ]
+            },
+            {
+                id: 74,
+                title: "Десерт «Рафаэло» из творога за 4 минуты",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 210,
+                ingredients: ["Творог мягкий - 130 г", "Кокосовая стружка - 3 ст.л.", "Мёд - 1 ч.л.", "Миндаль целый - 5 шт."],
+                instructions: [
+                    "Смешайте творог, половину кокосовой стружки и мёд.",
+                    "Сформируйте шарики, спрятав внутрь каждого по миндальному орешку.",
+                    "Обваляйте шарики в оставшейся кокосовой стружке."
+                ]
+            },
+            {
+                id: 75,
+                title: "Банановый десерт с йогуртом и корицей",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 160,
+                ingredients: ["Банан - 1 шт.", "Йогурт натуральный - 100 г", "Корица - 1/2 ч.л."],
+                instructions: [
+                    "Нарежьте банан кружочками в пиалу.",
+                    "Залейте греческим йогуртом.",
+                    "Щедро посыпьте корицей сверху."
+                ]
+            },
+            {
+                id: 76,
+                title: "Хрустящие хлебцы с шоколадной пастой и бананом",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "2 мин",
+                timeMinutes: 2,
+                calories: 190,
+                ingredients: ["Хлебцы кукурузные или рисовые - 2 шт.", "Шоколадная паста халяль - 1 ст.л.", "Банан - 1/2 шт."],
+                instructions: [
+                    "Намажьте хлебцы шоколадной пастой.",
+                    "Выложите тонкие слайсы банана сверху."
+                ]
+            },
+            {
+                id: 77,
+                title: "Мгновенный зефирный крем с ягодами",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 180,
+                ingredients: ["Мягкий творог - 120 г", "Зефир халяль - 1 шт.", "Ягоды - 30 г"],
+                instructions: [
+                    "Разломите зефир на кусочки и взбейте с мягким творогом в блендере до воздушности.",
+                    "Подавайте с ягодами."
+                ]
+            },
+            {
+                id: 78,
+                title: "Творожный десерт с курагой и орехами",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "4 мин",
+                timeMinutes: 4,
+                calories: 210,
+                ingredients: ["Мягкий творог - 150 г", "Курага мягкая - 4 шт.", "Грецкие орехи - 15 г"],
+                instructions: [
+                    "Мелко нарежьте курагу и орехи.",
+                    "Смешайте с мягким творогом и подавайте в креманке."
+                ]
+            },
+            {
+                id: 79,
+                title: "Мёд с грецкими орехами и черносливом",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "3 мин",
+                timeMinutes: 3,
+                calories: 250,
+                ingredients: ["Чернослив без косточек - 5 шт.", "Грецкие орехи - 20 г", "Мёд - 1.5 ст.л."],
+                instructions: [
+                    "Нафаршируйте чернослив половинками грецких орехов.",
+                    "Выложите на блюдце и щедро полейте жидким мёдом."
+                ]
+            },
+            {
+                id: 80,
+                title: "Десерт из хрустящих отрубей с йогуртом и мёдом",
+                category: "desserts-5",
+                categoryName: "Десерт до 5 мин",
+                time: "2 мин",
+                timeMinutes: 2,
+                calories: 170,
+                ingredients: ["Отруби хрустящие - 30 г", "Йогурт питьевой - 150 мл", "Мёд - 1 ч.л."],
+                instructions: [
+                    "Насыпьте хрустящие отруби в миску.",
+                    "Залейте питьевым йогуртом и добавьте мёд."
+                ]
+            },
+
+            // --- ДЕСЕРТЫ ДО 15 МИНУТ (20 рецептов) ---
+            {
+                id: 81,
+                title: "Карамелизированные бананы на сливочном масле",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "8 мин",
+                timeMinutes: 8,
+                calories: 230,
+                ingredients: ["Бананы крепкие - 2 шт.", "Масло сливочное - 15 г", "Сахар коричневый - 1 ст.л.", "Корица - 1/2 ч.л."],
+                instructions: [
+                    "Нарежьте бананы вдоль пополам или кружочками.",
+                    "Растопите сливочное масло на сковороде, добавьте коричневый сахар и корицу.",
+                    "Выложите бананы и обжаривайте по 3 минуты с каждой стороны до карамельной корочки."
+                ]
+            },
+            {
+                id: 82,
+                title: "Быстрые пахлава-роллы на сковороде",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 340,
+                ingredients: ["Тонкий лаваш - 1 лист", "Грецкие орехи измельченные - 50 г", "Масло сливочное растопленное - 30 г", "Мёд для пропитки - 2 ст.л."],
+                instructions: [
+                    "Смажьте лаваш маслом, посыпьте измельченными орехами и сверните в рулет.",
+                    "Нарежьте рулет на небольшие кусочки-роллы и обжарьте на сковороде с маслом до хруста.",
+                    "Горячие роллы щедро полейте мёдом."
+                ]
+            },
+            {
+                id: 83,
+                title: "Панкейки с ягодным соусом за 12 минут",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 310,
+                ingredients: ["Мука - 120 г", "Молоко - 100 мл", "Яйцо - 1 шт.", "Сахар - 1 ст.л.", "Замороженные ягоды для соуса - 70 г"],
+                instructions: [
+                    "Замесите тесто из муки, молока, яйца и сахара.",
+                    "Выпекайте панкейки на сухой сковороде.",
+                    "Прогрейте ягоды в сотейнике с ложкой сахара 3 минуты и полейте стопку панкейков."
+                ]
+            },
+            {
+                id: 84,
+                title: "Быстрая панакота на агар-агаре",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "15 мин",
+                timeMinutes: 15,
+                calories: 220,
+                ingredients: ["Сливки 10-20% - 200 мл", "Агар-агар - 1 ч.л.", "Сахар или подсластитель - 2 ст.л.", "Ванилин"],
+                instructions: [
+                    "Смешайте сливки, агар-агар и сахар в сотейнике.",
+                    "Доведите до кипения при постоянном помешивании и кипятите ровно 1 минуту.",
+                    "Разлейте по формочкам и дайте остыть до застывания (агар застывает при комнатной температуре)."
+                ]
+            },
+            {
+                id: 85,
+                title: "Яблочные оладьи за 12 минут",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 260,
+                ingredients: ["Яблоко - 1 шт.", "Кефир - 100 мл", "Мука - 80 г", "Яйцо - 1 шт.", "Сахар - 1 ст.л."],
+                instructions: [
+                    "Натрите яблоко на крупной терке.",
+                    "Смешайте кефир, яйцо, сахар, муку и тертое яблоко в тесто.",
+                    "Жарьте оладьи на сковороде с маслом по 3 минуты с каждой стороны."
+                ]
+            },
+            {
+                id: 86,
+                title: "Творожный трайфл в стакане с печеньем и персиком",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 290,
+                ingredients: ["Мягкий творог - 200 г", "Печенье песочное - 50 г", "Персики консервированные - 100 г", "Мёд - 1 ст.л."],
+                instructions: [
+                    "Измельчите печенье в крошку.",
+                    "Нарежьте персики кубиками.",
+                    "Выложите в красивый стакан слоями: крошка печенья, творог, персики, мёд. Повторите."
+                ]
+            },
+            {
+                id: 87,
+                title: "Творожные шарики в масле (экспресс-пончики)",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "15 мин",
+                timeMinutes: 15,
+                calories: 320,
+                ingredients: ["Творог - 150 г", "Яйцо - 1 шт.", "Мука - 4 ст.л.", "Сахар - 1.5 ст.л.", "Масло для фритюра"],
+                instructions: [
+                    "Смешайте творог, яйцо, сахар и муку в мягкое тесто.",
+                    "Скатайте маленькие шарики.",
+                    "Обжаривайте во фритюре или глубокой сковороде в масле до золотистой корочки (около 4 минут)."
+                ]
+            },
+            {
+                id: 88,
+                title: "Груши, запеченные с рикоттой и мёдом",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "15 мин",
+                timeMinutes: 15,
+                calories: 210,
+                ingredients: ["Спелые груши - 2 шт.", "Сыр рикотта - 60 г", "Мёд - 1 ст.л.", "Корица"],
+                instructions: [
+                    "Разрежьте груши пополам и удалите сердцевину.",
+                    "Запекайте в духовке или мини-печи 10 минут до мягкости.",
+                    "Наполните углубления рикоттой, полейте мёдом и посыпьте корицей."
+                ]
+            },
+            {
+                id: 89,
+                title: "Шоколадные блинчики с творожной начинкой",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "15 мин",
+                timeMinutes: 15,
+                calories: 310,
+                ingredients: ["Молоко - 200 мл", "Мука - 100 г", "Какао - 1.5 ст.л.", "Творог для начинки - 120 г", "Сахар - 1 ст.л."],
+                instructions: [
+                    "Приготовьте шоколадное тесто из молока, муки, какао и сахара, испеките блинчики.",
+                    "Смешайте творог с сахаром для начинки.",
+                    "Заверните творог в блинчики конвертиками."
+                ]
+            },
+            {
+                id: 90,
+                title: "Творожный чизкейк в стакане без выпечки",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 280,
+                ingredients: ["Печенье песочное - 50 г", "Сливочный сыр халяль - 100 г", "Сахарная пудра - 1.5 ст.л.", "Ягоды - 40 г"],
+                instructions: [
+                    "Измельчите печенье в крошку и выложите на дно стаканов.",
+                    "Взбейте сливочный сыр с сахарной пудрой.",
+                    "Выложите сырный крем поверх печенья и украсьте свежими ягодами."
+                ]
+            },
+            {
+                id: 91,
+                title: "Французские тосты с нутеллой и бананом",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 360,
+                ingredients: ["Хлеб белый - 2 ломтика", "Шоколадная паста - 2 ст.л.", "Банан - 1 шт.", "Яйцо и молоко для кляра"],
+                instructions: [
+                    "Сделайте сэндвич: хлеб, шоколадная паста, слайсы банана, хлеб.",
+                    "Обмакните сэндвич в смесь яйца и молока.",
+                    "Обжарьте на сливочном масле до хрустящей корочки с обеих сторон."
+                ]
+            },
+            {
+                id: 92,
+                title: "Творожные мини-рулетики из лаваша",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 270,
+                ingredients: ["Лаваш - 1 лист", "Творог - 150 г", "Изюм - 30 г", "Яйцо для смашивания - 1 шт."],
+                instructions: [
+                    "Смешайте творог с изюмом и сахаром, распределите по лавашу.",
+                    "Сверните в рулет и нарежьте на порционные улитки.",
+                    "Смажьте яйцом и выпекайте/обжаривайте 10 минут до румяной корочки."
+                ]
+            },
+            {
+                id: 93,
+                title: "Мгновенное печенье из творога и овсянки",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "15 мин",
+                timeMinutes: 15,
+                calories: 240,
+                ingredients: ["Творог - 130 г", "Овсяные хлопья - 80 г", "Мёд - 1.5 ст.л.", "Корица"],
+                instructions: [
+                    "Смешайте творог, овсянку, мёд и корицу в липкую массу.",
+                    "Сформируйте небольшие печенья на пергаменте.",
+                    "Выпекайте в мини-печи или духовке 12 минут при 180°C."
+                ]
+            },
+            {
+                id: 94,
+                title: "Сливочный десерт с манго и чиа",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 210,
+                ingredients: ["Пюре манго - 100 г", "Йогурт греческий - 120 г", "Семена чиа - 2 ст.л."],
+                instructions: [
+                    "Смешайте йогурт с семенами чиа и дайте постоять 5 минут.",
+                    "Выложите в стакан слой йогурта с чиа, затем слой мангового пюре.",
+                    "Повторите слои."
+                ]
+            },
+            {
+                id: 95,
+                title: "Яблочный штрудель-минутка в лаваше",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "15 мин",
+                timeMinutes: 15,
+                calories: 290,
+                ingredients: ["Лаваш - 1 лист", "Яблоки - 2 шт.", "Корица и сахар - по вкусу", "Грецкие орехи - 20 г"],
+                instructions: [
+                    "Натрите яблоки, смешайте с сахаром, корицей и орехами.",
+                    "Выложите на лаваш, сверните в рулет и смажьте маслом.",
+                    "Запекайте в печи или обжарьте на сухой сковороде под крышкой 10 минут."
+                ]
+            },
+            {
+                id: 96,
+                title: "Шоколадные оладьи на кефире",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 280,
+                ingredients: ["Кефир - 150 мл", "Мука - 90 г", "Какао - 1.5 ст.л.", "Яйцо - 1 шт.", "Сахар - 1.5 ст.л."],
+                instructions: [
+                    "Смешайте кефир, яйцо, сахар, муку и какао до однородного теста.",
+                    "Выпекайте шоколадные оладьи на разогретой сковороде по 3 минуты с каждой стороны."
+                ]
+            },
+            {
+                id: 97,
+                title: "Ягодный кисель на крахмале за 10 минут",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 130,
+                ingredients: ["Замороженные ягоды - 100 г", "Крахмал кукурузный - 1.5 ст.л.", "Сахар - 2 ст.л.", "Вода - 300 мл"],
+                instructions: [
+                    "Проварите ягоды с сахаром и водой 5 минут.",
+                    "Разведите крахмал в 50 мл холодной воды и тонкой струйкой влейте в кипящий ягодный отвар при помешивании.",
+                    "Доведите до загустения и разлейте по пиалам."
+                ]
+            },
+            {
+                id: 98,
+                title: "Банановый пирог за 15 минут в чашке",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "12 мин",
+                timeMinutes: 12,
+                calories: 310,
+                ingredients: ["Банан спелый - 1 шт.", "Яйцо - 1 шт.", "Мука - 4 ст.л.", "Молоко - 2 ст.л.", "Разрыхлитель - 1/2 ч.л."],
+                instructions: [
+                    "Разомните банан в миске, добавьте яйцо, молоко, муку и разрыхлитель.",
+                    "Тщательно перемешайте и перелейте тесто в формочки для кексов.",
+                    "Выпекайте в микроволновке на высокой мощности около 3.5 минут."
+                ]
+            },
+            {
+                id: 99,
+                title: "Десерт из ряженки с желатиновой текстурой (агар-агар)",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "15 мин",
+                timeMinutes: 15,
+                calories: 190,
+                ingredients: ["Ряженка халяль - 250 мл", "Агар-агар - 1 ч.л.", "Какао - 1 ст.л.", "Мёд - 1 ст.л."],
+                instructions: [
+                    "Смешайте ряженку, какао, мёд и агар-агар в сотейнике.",
+                    "Доведите до кипения и проварите 1 минуту при помешивании.",
+                    "Разлейте по стаканчикам и дайте остыть до застывания."
+                ]
+            },
+            {
+                id: 100,
+                title: "Творожный мусс с персиковым пюре",
+                category: "desserts-15",
+                categoryName: "Десерт до 15 мин",
+                time: "10 мин",
+                timeMinutes: 10,
+                calories: 210,
+                ingredients: ["Мягкий творог - 150 г", "Персики консервированные - 80 г", "Мёд - 1 ч.л."],
+                instructions: [
+                    "Взбейте мягкий творог с персиками и мёдом в блендере до воздушного мусса.",
+                    "Переложите в красивую креманку и охладите перед подачей."
+                ]
+            }
+        ];
+
+        // State variables
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let showOnlyFavorites = false;
+        let displayedCount = 16;
+        const itemsPerLoad = 16;
+        let favorites = JSON.parse(localStorage.getItem('halal_favorites')) || [];
+        let currentTimer = null;
+        let timerSecondsLeft = 0;
+        let timerRunning = false;
+
+        // DOM Elements
+        const recipesGrid = document.getElementById('recipesGrid');
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearch');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const emptyState = document.getElementById('emptyState');
+        const loadMoreContainer = document.getElementById('loadMoreContainer');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const favoritesFilterBtn = document.getElementById('favoritesFilterBtn');
+        const mobileFavoritesBtn = document.getElementById('mobileFavoritesBtn');
+        const favoritesCountSpan = document.getElementById('favoritesCount');
+        const mobileFavCountSpan = document.getElementById('mobileFavCount');
+        const filterInfo = document.getElementById('filterInfo');
+        const activeFilterName = document.getElementById('activeFilterName');
+        const resetFilterBtn = document.getElementById('resetFilter');
+        const resetSearchBtn = document.getElementById('resetSearchBtn');
+
+        // Modal Elements
+        const recipeModal = document.getElementById('recipeModal');
+        const modalContent = document.getElementById('modalContent');
+        const closeModal = document.getElementById('closeModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalCategoryBadge = document.getElementById('modalCategoryBadge');
+        const modalTimeBadge = document.getElementById('modalTimeBadge');
+        const modalTimeText = document.getElementById('modalTimeText');
+        const modalCaloriesText = document.getElementById('modalCaloriesText');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalIngredients = document.getElementById('modalIngredients');
+        const modalInstructions = document.getElementById('modalInstructions');
+        const modalFavoriteBtn = document.getElementById('modalFavoriteBtn');
+        const modalFavText = document.getElementById('modalFavText');
+        
+        // Timer Elements
+        const startTimerBtn = document.getElementById('startTimer');
+        const resetTimerBtn = document.getElementById('resetTimer');
+        const timerDisplay = document.getElementById('timerDisplay');
+
+        // Initialize App
+        function initApp() {
+            updateFavoritesCount();
+            renderRecipes();
+            setupEventListeners();
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.trim().toLowerCase();
+                displayedCount = 16;
+                if (searchQuery.length > 0) {
+                    clearSearchBtn.classList.remove('hidden');
+                } else {
+                    clearSearchBtn.classList.add('hidden');
+                }
+                renderRecipes();
+            });
+
+            clearSearchBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchQuery = '';
+                clearSearchBtn.classList.add('hidden');
+                displayedCount = 16;
+                renderRecipes();
+            });
+
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryBtns.forEach(b => {
+                        b.classList.remove('bg-emeraldPrimary', 'text-white', 'shadow-lg', 'shadow-emeraldPrimary/30');
+                        b.classList.add('bg-cardBg', 'text-textMuted');
+                    });
+                    btn.classList.remove('bg-cardBg', 'text-textMuted');
+                    btn.classList.add('bg-emeraldPrimary', 'text-white', 'shadow-lg', 'shadow-emeraldPrimary/30');
+                    
+                    currentCategory = btn.getAttribute('data-category');
+                    showOnlyFavorites = false;
+                    displayedCount = 16;
+                    renderRecipes();
+                });
+            });
+
+            const toggleFavorites = () => {
+                showOnlyFavorites = !showOnlyFavorites;
+                displayedCount = 16;
+                if (showOnlyFavorites) {
+                    favoritesFilterBtn.classList.add('border-goldAccent', 'bg-goldAccent/10');
+                    mobileFavoritesBtn.classList.add('bg-goldAccent/20', 'border-goldAccent');
+                } else {
+                    favoritesFilterBtn.classList.remove('border-goldAccent', 'bg-goldAccent/10');
+                    mobileFavoritesBtn.classList.remove('bg-goldAccent/20', 'border-goldAccent');
+                }
+                renderRecipes();
+            };
+
+            favoritesFilterBtn.addEventListener('click', toggleFavorites);
+            mobileFavoritesBtn.addEventListener('click', toggleFavorites);
+
+            loadMoreBtn.addEventListener('click', () => {
+                displayedCount += itemsPerLoad;
+                renderRecipes();
+            });
+
+            resetFilterBtn.addEventListener('click', () => {
+                currentCategory = 'all';
+                showOnlyFavorites = false;
+                searchQuery = '';
+                searchInput.value = '';
+                clearSearchBtn.classList.add('hidden');
+                displayedCount = 16;
+                categoryBtns.forEach(b => {
+                    b.classList.remove('bg-emeraldPrimary', 'text-white', 'shadow-lg', 'shadow-emeraldPrimary/30');
+                    b.classList.add('bg-cardBg', 'text-textMuted');
+                });
+                categoryBtns[0].classList.remove('bg-cardBg', 'text-textMuted');
+                categoryBtns[0].classList.add('bg-emeraldPrimary', 'text-white', 'shadow-lg', 'shadow-emeraldPrimary/30');
+                renderRecipes();
+            });
+
+            resetSearchBtn.addEventListener('click', () => {
+                currentCategory = 'all';
+                showOnlyFavorites = false;
+                searchQuery = '';
+                searchInput.value = '';
+                clearSearchBtn.classList.add('hidden');
+                displayedCount = 16;
+                categoryBtns.forEach(b => {
+                    b.classList.remove('bg-emeraldPrimary', 'text-white', 'shadow-lg', 'shadow-emeraldPrimary/30');
+                    b.classList.add('bg-cardBg', 'text-textMuted');
+                });
+                categoryBtns[0].classList.remove('bg-cardBg', 'text-textMuted');
+                categoryBtns[0].classList.add('bg-emeraldPrimary', 'text-white', 'shadow-lg', 'shadow-emeraldPrimary/30');
+                renderRecipes();
+            });
+
+            // Modal close events
+            closeModal.addEventListener('click', closeModalWindow);
+            closeModalBtn.addEventListener('click', closeModalWindow);
+            recipeModal.addEventListener('click', (e) => {
+                if (e.target === recipeModal) closeModalWindow();
+            });
+
+            // Timer controls
+            startTimerBtn.addEventListener('click', toggleTimer);
+            resetTimerBtn.addEventListener('click', resetTimer);
+        }
+
+        // Filter and get filtered recipes
+        function getFilteredRecipes() {
+            return recipes.filter(recipe => {
+                // Category filter
+                if (currentCategory !== 'all' && recipe.category !== currentCategory) {
+                    return false;
+                }
+                // Favorites filter
+                if (showOnlyFavorites && !favorites.includes(recipe.id)) {
+                    return false;
+                }
+                // Search filter
+                if (searchQuery) {
+                    const matchTitle = recipe.title.toLowerCase().includes(searchQuery);
+                    const matchIngredients = recipe.ingredients.some(ing => ing.toLowerCase().includes(searchQuery));
+                    if (!matchTitle && !matchIngredients) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+        }
+
+        // Render Recipes Grid
+        function renderRecipes() {
+            const filtered = getFilteredRecipes();
+            recipesGrid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                loadMoreContainer.classList.add('hidden');
+                filterInfo.classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            // Show filter info if filtering active
+            if (currentCategory !== 'all' || showOnlyFavorites || searchQuery) {
+                filterInfo.classList.remove('hidden');
+                let infoText = '';
+                if (showOnlyFavorites) infoText += 'Избранное ';
+                if (currentCategory !== 'all') {
+                    const activeBtn = document.querySelector(`.category-btn[data-category="${currentCategory}"]`);
+                    infoText += activeBtn ? `(${activeBtn.textContent.trim()}) ` : '';
+                }
+                if (searchQuery) infoText += `• запрос: "${searchQuery}"`;
+                activeFilterName.textContent = infoText;
+            } else {
+                filterInfo.classList.add('hidden');
+            }
+
+            const recipesToDisplay = filtered.slice(0, displayedCount);
+
+            recipesToDisplay.forEach((recipe, index) => {
+                const isFav = favorites.includes(recipe.id);
+                const card = document.createElement('div');
+                card.className = `glass-card rounded-2xl p-4 flex flex-col justify-between hover:border-emeraldPrimary/40 transition-all duration-300 shadow-xl animate-fade-in cursor-pointer group`;
+                card.style.animationDelay = `${(index % 8) * 0.03}s`;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emeraldPrimary/10 text-emeraldPrimary border border-emeraldPrimary/20">
+                                ${recipe.categoryName}
+                            </span>
+                            <button class="fav-btn w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-sm transition-all ${isFav ? 'text-goldAccent bg-goldAccent/10' : 'text-textMuted hover:text-textMain'}" data-id="${recipe.id}" title="В избранное">
+                                <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
+                            </button>
+                        </div>
+                        <h3 class="font-bold text-base text-textMain group-hover:text-emeraldPrimary transition-colors line-clamp-2 mb-3">
+                            ${recipe.title}
+                        </h3>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-textMuted pt-3 border-t border-white/5">
+                            <span class="flex items-center gap-1.5 font-semibold text-goldAccent">
+                                <i class="fa-regular fa-clock"></i> ${recipe.time}
+                            </span>
+                            <span class="flex items-center gap-1 font-semibold text-textMain">
+                                <i class="fa-solid fa-fire text-orange-400"></i> ${recipe.calories} ккал
+                            </span>
+                        </div>
+                    </div>
+                `;
+
+                // Click card to open modal (except favorite button)
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('.fav-btn')) return;
+                    openRecipeModal(recipe);
+                });
+
+                // Favorite button click
+                const favBtn = card.querySelector('.fav-btn');
+                favBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleFavorite(recipe.id);
+                });
+
+                recipesGrid.appendChild(card);
+            });
+
+            // Load more button visibility
+            if (filtered.length > displayedCount) {
+                loadMoreContainer.classList.remove('hidden');
+            } else {
+                loadMoreContainer.classList.add('hidden');
+            }
+        }
+
+        // Toggle Favorite
+        function toggleFavorite(id) {
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(favId => favId !== id);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('halal_favorites', JSON.stringify(favorites));
+            updateFavoritesCount();
+            renderRecipes();
+            
+            // If modal is open, update modal favorite button too
+            if (!recipeModal.classList.contains('hidden') && currentModalRecipeId === id) {
+                updateModalFavoriteState(id);
+            }
+        }
+
+        function updateFavoritesCount() {
+            favoritesCountSpan.textContent = favorites.length;
+            mobileFavCountSpan.textContent = favorites.length;
+        }
+
+        let currentModalRecipeId = null;
+
+        // Open Recipe Modal
+        function openRecipeModal(recipe) {
+            currentModalRecipeId = recipe.id;
+            modalCategoryBadge.textContent = recipe.categoryName;
+            modalTimeBadge.classList.remove('hidden');
+            modalTimeText.textContent = recipe.time;
+            modalCaloriesText.textContent = recipe.calories;
+            modalTitle.textContent = recipe.title;
+
+            // Render Ingredients with Checkboxes
+            modalIngredients.innerHTML = '';
+            recipe.ingredients.forEach((ing, idx) => {
+                const div = document.createElement('label');
+                div.className = "flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/5 cursor-pointer transition-colors select-none";
+                div.innerHTML = `
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded border-white/20 bg-darkBg text-emeraldPrimary focus:ring-emeraldPrimary focus:ring-offset-darkBg cursor-pointer">
+                    <span class="text-sm text-textMain leading-relaxed">${ing}</span>
+                `;
+                modalIngredients.appendChild(div);
+            });
+
+            // Render Instructions
+            modalInstructions.innerHTML = '';
+            recipe.instructions.forEach((step, idx) => {
+                const div = document.createElement('div');
+                div.className = "flex gap-3.5 p-3.5 rounded-xl bg-[#121417]/60 border border-white/5";
+                div.innerHTML = `
+                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-emeraldPrimary/20 text-emeraldPrimary text-xs font-bold flex items-center justify-center border border-emeraldPrimary/30">
+                        ${idx + 1}
+                    </div>
+                    <p class="text-sm text-textMain leading-relaxed">${step}</p>
+                `;
+                modalInstructions.appendChild(div);
+            });
+
+            updateModalFavoriteState(recipe.id);
+
+            // Setup timer for this recipe (based on minutes)
+            setupTimer(recipe.timeMinutes * 60);
+
+            // Show modal with animation
+            recipeModal.classList.remove('hidden');
+            setTimeout(() => {
+                recipeModal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+
+            // Modal favorite click
+            modalFavoriteBtn.onclick = () => {
+                toggleFavorite(recipe.id);
+            };
+        }
+
+        function updateModalFavoriteState(id) {
+            const isFav = favorites.includes(id);
+            const icon = modalFavoriteBtn.querySelector('fa-heart') || modalFavoriteBtn.querySelector('i');
+            if (isFav) {
+                modalFavoriteBtn.classList.add('bg-goldAccent/20', 'text-goldAccent', 'border', 'border-goldAccent/30');
+                modalFavoriteBtn.classList.remove('bg-white/5', 'text-textMuted');
+                icon.className = "fa-solid fa-heart text-goldAccent";
+                modalFavText.textContent = "В избранном";
+            } else {
+                modalFavoriteBtn.classList.remove('bg-goldAccent/20', 'text-goldAccent', 'border', 'border-goldAccent/30');
+                modalFavoriteBtn.classList.add('bg-white/5', 'text-textMuted');
+                icon.className = "fa-solid fa-heart text-textMuted";
+                modalFavText.textContent = "В избранное";
+            }
+        }
+
+        function closeModalWindow() {
+            resetTimer();
+            recipeModal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                recipeModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        // Timer Logic
+        function setupTimer(seconds) {
+            resetTimer();
+            timerSecondsLeft = seconds;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSecondsLeft / 60);
+            const secs = timerSecondsLeft % 60;
+            timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function toggleTimer() {
+            if (timerRunning) {
+                clearInterval(currentTimer);
+                timerRunning = false;
+                startTimerBtn.textContent = "Продолжить";
+                startTimerBtn.classList.remove('bg-orange-500', 'hover:bg-orange-600');
+                startTimerBtn.classList.add('bg-emeraldPrimary', 'hover:bg-emeraldHover');
+            } else {
+                if (timerSecondsLeft <= 0) return;
+                timerRunning = true;
+                startTimerBtn.textContent = "Пауза";
+                startTimerBtn.classList.remove('bg-emeraldPrimary', 'hover:bg-emeraldHover');
+                startTimerBtn.classList.add('bg-orange-500', 'hover:bg-orange-600');
+
+                currentTimer = setInterval(() => {
+                    if (timerSecondsLeft > 0) {
+                        timerSecondsLeft--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(currentTimer);
+                        timerRunning = false;
+                        startTimerBtn.textContent = "Старт";
+                        startTimerBtn.classList.remove('bg-orange-500', 'hover:bg-orange-600');
+                        startTimerBtn.classList.add('bg-emeraldPrimary', 'hover:bg-emeraldHover');
+                        alert('⏰ Таймер завершил работу! Блюдо готово!');
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(currentTimer);
+            timerRunning = false;
+            startTimerBtn.textContent = "Старт";
+            startTimerBtn.classList.remove('bg-orange-500', 'hover:bg-orange-600');
+            startTimerBtn.classList.add('bg-emeraldPrimary', 'hover:bg-emeraldHover');
+            timerSecondsLeft = 0;
+            updateTimerDisplay();
+        }
+
+        // Run application on load
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
